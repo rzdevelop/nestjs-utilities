@@ -24,7 +24,7 @@ export class HealthModule {
             memory: MemoryHealthIndicator,
             http: HttpHealthIndicator,
             db: TypeOrmHealthIndicator,
-          ) => new HealthService(health, memory, http, db, enableTypeorm),
+          ): HealthService => new HealthService(health, memory, http, db, enableTypeorm),
           inject: [HealthCheckService, MemoryHealthIndicator, HttpHealthIndicator, ...typeorm],
         },
       ],

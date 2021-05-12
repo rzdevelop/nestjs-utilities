@@ -5,6 +5,8 @@ import {
   TypeOrmHealthIndicator,
   MemoryHealthIndicator,
   HealthIndicatorFunction,
+  HealthCheckResult,
+  HealthIndicatorResult,
 } from '@nestjs/terminus';
 
 export interface HealthCheckOptions {
@@ -24,11 +26,11 @@ export class HealthService {
 
   healthCheck(
     options: HealthCheckOptions = { checks: { typeorm: false }, healthIndicators: [] as HealthIndicatorFunction[] },
-  ) {
+  ): Promise<HealthCheckResult> {
     const healthIndicators: HealthIndicatorFunction[] = [
-      async () => this.memory.checkHeap('memory_heap', 3000 * 1024 * 1024),
-      async () => this.memory.checkRSS('memory_rss', 3000 * 1024 * 1024),
-      async () => this.http.pingCheck('google', 'https://google.com'),
+      async (): Promise<HealthIndicatorResult> => this.memory.checkHeap('memory_heap', 3000 * 1024 * 1024),
+      async (): Promise<HealthIndicatorResult> => this.memory.checkRSS('memory_rss', 3000 * 1024 * 1024),
+      async (): Promise<HealthIndicatorResult> => this.http.pingCheck('google', 'https://google.com'),
       ...(options.healthIndicators || []),
     ];
 
