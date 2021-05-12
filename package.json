@@ -5,6 +5,10 @@
   "author": "Renan Zelaya <renan_zelaya@hotmail.com>",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rzdevelop/nestjs-utilities.git"
+  },
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "tsc",
