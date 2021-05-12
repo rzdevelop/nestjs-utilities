@@ -19,6 +19,7 @@ export class HealthService {
     private readonly memory: MemoryHealthIndicator,
     private readonly db: TypeOrmHealthIndicator,
     private readonly http: HttpHealthIndicator,
+    private readonly enableTypeorm: boolean,
   ) {}
 
   healthCheck(
@@ -31,7 +32,7 @@ export class HealthService {
       ...(options.healthIndicators || []),
     ];
 
-    if (options.checks?.typeorm) {
+    if (this.enableTypeorm && options.checks?.typeorm) {
       healthIndicators.push(async () => await this.db.pingCheck('db', { timeout: 60000 }));
     }
 
