@@ -1,7 +1,15 @@
 name: Publish Node.js Package
 on:
   release:
-    types: [created, published, released]
+    types:
+      - created
+      - published
+      - released
+  push:
+    # Pattern matched against refs/tags
+    tags:
+      - '**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
