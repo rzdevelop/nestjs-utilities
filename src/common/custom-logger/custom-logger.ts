@@ -2,6 +2,9 @@ import { Injectable, Logger, Scope } from '@nestjs/common';
 
 @Injectable({ scope: Scope.TRANSIENT })
 export class CustomLogger extends Logger {
+  constructor() {
+    super();
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   info(message: string, data: Record<any, any>): void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

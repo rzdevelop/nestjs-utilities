@@ -1,4 +1,4 @@
-import { DynamicModule, Module, ModuleMetadata, CanActivate } from '@nestjs/common';
+import { DynamicModule, Module, ModuleMetadata } from '@nestjs/common';
 import { ConfigFactory, ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
@@ -19,7 +19,7 @@ export class ConfigurationModule {
     return {
       module: ConfigurationModule,
       imports: [
-        CustomLoggerModule,
+        CustomLoggerModule.register(),
         ConfigModule.forRoot({
           load,
           validationSchema,
