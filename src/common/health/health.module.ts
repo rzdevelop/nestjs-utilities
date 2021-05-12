@@ -22,10 +22,10 @@ export class HealthModule {
           useFactory: (
             health: HealthCheckService,
             memory: MemoryHealthIndicator,
-            db: TypeOrmHealthIndicator,
             http: HttpHealthIndicator,
-          ) => new HealthService(health, memory, db, http, enableTypeorm),
-          inject: [HealthCheckService, HttpHealthIndicator, ...typeorm, MemoryHealthIndicator],
+            db: TypeOrmHealthIndicator,
+          ) => new HealthService(health, memory, http, db, enableTypeorm),
+          inject: [HealthCheckService, MemoryHealthIndicator, HttpHealthIndicator, ...typeorm],
         },
       ],
       exports: [HealthService],

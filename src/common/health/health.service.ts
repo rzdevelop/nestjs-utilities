@@ -17,8 +17,8 @@ export class HealthService {
   constructor(
     private readonly health: HealthCheckService,
     private readonly memory: MemoryHealthIndicator,
-    private readonly db: TypeOrmHealthIndicator,
     private readonly http: HttpHealthIndicator,
+    private readonly db: TypeOrmHealthIndicator,
     private readonly enableTypeorm: boolean,
   ) {}
 
