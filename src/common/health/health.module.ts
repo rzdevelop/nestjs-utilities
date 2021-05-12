@@ -5,7 +5,7 @@ import { HealthService } from './health.service';
 
 @Module({})
 export class HealthModule {
-  register(): DynamicModule {
+  static register(): DynamicModule {
     return {
       module: HealthModule,
       imports: [TerminusModule],
