@@ -1,7 +1,7 @@
 import { PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
-import { TimestampAggregateRootBaseEntity } from './timestamp-base.entity';
+import { TimestampAggregateRootBaseEntity } from './timestamp-aggregate-root-base.entity';
 
 export abstract class BaseUuidEntity extends TimestampAggregateRootBaseEntity {
   constructor() {

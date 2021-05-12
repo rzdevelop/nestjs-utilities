@@ -1,6 +1,12 @@
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-export abstract class TimestampBaseEntity {
+import { AggregateRoot } from '@nestjs/cqrs';
+
+export abstract class TimestampAggregateRootBaseEntity extends AggregateRoot {
+  constructor() {
+    super();
+  }
+
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
