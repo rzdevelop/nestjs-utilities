@@ -15,6 +15,7 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint 'src/**/*.{js,ts,tsx}' -c .eslintrc.js",
     "test": "jest --config jestconfig.json",
+    "test:coverage": "jest --config jestconfig.json  --coverage --coverageReporter=\"json-summary\"",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",

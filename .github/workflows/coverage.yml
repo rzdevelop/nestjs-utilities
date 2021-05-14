@@ -15,9 +15,12 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: |
-          SUMMARY="$(npm test -- --coverageReporters='text-summary' | tail -2 | head -1)"
-          TOKENS=($SUMMARY)
-          echo "COVERAGE=$(echo ${TOKENS[2]})" >> $GITHUB_ENV
+          sudo apt-get install jq
+          npm test -- --coverageReporters="json-summary"
+          SUMMARY="$(cat coverage/coverage-summary.json | jq '.total.lines.pct')"
+          COLOR=$(if (( $SUMMARY < 33 )); then echo "red"; elif (( $SUMMARY < 66 )); then echo "yellow"; else echo "green"; fi)
+          echo "COVERAGE=$(echo ${SUMMARY})" >> $GITHUB_ENV
+          echo "COLOR=$(echo ${COLOR})" >> $GITHUB_ENV
           REF=${{ github.ref }}
           echo "github.ref: $REF"
           IFS='/' read -ra PATHS <<< "$REF"
@@ -32,5 +35,5 @@ jobs:
           filename: nestjs-utilities__${{ env.BRANCH }}.json
           label: Test Coverage
           message: ${{ env.COVERAGE }}
-          color: green
+          color: ${{ env.COLOR }}
           namedLogo: jest
