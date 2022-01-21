@@ -14,7 +14,8 @@ jobs:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: |
+      - name: Set Variables
+        run: |
           sudo apt-get install jq
           npm test -- --coverageReporters="json-summary"
           SUMMARY="$(cat coverage/coverage-summary.json | jq '.total.lines.pct')"
