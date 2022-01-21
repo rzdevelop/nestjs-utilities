@@ -1,10 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import {
-  TerminusModule,
   HealthCheckService,
   HttpHealthIndicator,
-  TypeOrmHealthIndicator,
   MemoryHealthIndicator,
+  TerminusModule,
+  TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 
 import { HealthService } from './health.service';

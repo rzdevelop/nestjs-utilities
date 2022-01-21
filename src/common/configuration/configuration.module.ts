@@ -1,33 +1,16 @@
 import { DynamicModule, Module, ModuleMetadata } from '@nestjs/common';
-import { ConfigFactory, ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
+import { ConfigModule, ConfigModuleOptions } from '@nestjs/config';
 
-import { CustomLoggerModule } from '../custom-logger';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-interface ConfigurationModuleOptions<ObjectSchema = any> extends Omit<ModuleMetadata, 'controllers'> {
-  load?: ConfigFactory[];
-  validationSchema?: Joi.ObjectSchema<ObjectSchema>;
+interface ConfigurationModuleOptions extends Omit<ModuleMetadata, 'controllers'> {
+  configModulesOptions?: ConfigModuleOptions;
 }
 
 @Module({})
 export class ConfigurationModule {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static register<ObjectSchema = any>({
-    load,
-    validationSchema,
-    ...moduleMetadata
-  }: ConfigurationModuleOptions<ObjectSchema>): DynamicModule {
+  static register({ configModulesOptions, ...moduleMetadata }: ConfigurationModuleOptions): DynamicModule {
     return {
       module: ConfigurationModule,
-      imports: [
-        CustomLoggerModule.register(),
-        ConfigModule.forRoot({
-          load,
-          validationSchema,
-        }),
-        ...(moduleMetadata.imports || []),
-      ],
+      imports: [ConfigModule.forRoot(configModulesOptions), ...(moduleMetadata.imports || [])],
       providers: [...(moduleMetadata.providers || [])],
       exports: [...(moduleMetadata.exports || [])],
     };

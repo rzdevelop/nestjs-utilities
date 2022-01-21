@@ -1,2 +1,2 @@
-export { AuthUsr } from './auth-usr.decorator';
+export { BuildAuthUsrDecorator } from './auth-usr.decorator';
 export * from './roles';

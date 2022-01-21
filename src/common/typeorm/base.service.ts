@@ -1,11 +1,11 @@
+import { PinoLogger } from 'nestjs-pino';
 import { DeleteResult, FindConditions, FindManyOptions, FindOneOptions, Repository, UpdateResult } from 'typeorm';
 
-import { CustomLogger } from '../custom-logger';
-import { PaginatedResponse } from '../paginated-response';
+import { PaginatedResponse } from '../pagination/paginated-response';
 
 export class BaseService<TEntity, TRepository extends Repository<TEntity>> {
   constructor(
-    protected readonly logger: CustomLogger,
+    protected readonly logger: PinoLogger,
     protected readonly repository: TRepository,
     loggerContext: string,
   ) {

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import {
-  HealthCheckService,
-  HttpHealthIndicator,
-  TypeOrmHealthIndicator,
-  MemoryHealthIndicator,
-  HealthIndicatorFunction,
   HealthCheckResult,
+  HealthCheckService,
+  HealthIndicatorFunction,
   HealthIndicatorResult,
+  HttpHealthIndicator,
+  MemoryHealthIndicator,
+  TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
 
 export interface HealthCheckOptions {
@@ -25,7 +25,10 @@ export class HealthService {
   ) {}
 
   healthCheck(
-    options: HealthCheckOptions = { checks: { typeorm: false }, healthIndicators: [] as HealthIndicatorFunction[] },
+    options: HealthCheckOptions = {
+      checks: { typeorm: false },
+      healthIndicators: [] as HealthIndicatorFunction[],
+    },
   ): Promise<HealthCheckResult> {
     const healthIndicators: HealthIndicatorFunction[] = [
       async (): Promise<HealthIndicatorResult> => this.memory.checkHeap('memory_heap', 3000 * 1024 * 1024),
