@@ -1,3 +1,4 @@
+import { HttpModule, HttpModuleOptions } from '@nestjs/axios';
 import { DynamicModule, Module } from '@nestjs/common';
 import {
   HealthCheckService,
@@ -9,13 +10,22 @@ import {
 
 import { HealthService } from './health.service';
 
+export interface HealthModuleOptions {
+  enableTypeorm: boolean;
+  httpModuleOptions: HttpModuleOptions;
+}
+
 @Module({})
 export class HealthModule {
-  static register({ enableTypeorm } = { enableTypeorm: false }): DynamicModule {
+  static register(
+    { enableTypeorm, httpModuleOptions } = {
+      enableTypeorm: false,
+    } as HealthModuleOptions,
+  ): DynamicModule {
     const typeorm = enableTypeorm ? [TypeOrmHealthIndicator] : [];
     return {
       module: HealthModule,
-      imports: [TerminusModule],
+      imports: [TerminusModule, HttpModule.register(httpModuleOptions ?? {})],
       providers: [
         {
           provide: HealthService,
