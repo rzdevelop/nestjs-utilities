@@ -25,7 +25,7 @@ export const useSwagger = (app: INestApplication, options: SwaggerOptions = defa
     .setVersion(options.version ?? version)
     .addTag('Root');
 
-  if (options ?? addBearerAuth) {
+  if (options.addBearerAuth ?? addBearerAuth) {
     documentBuilder.addBearerAuth();
   }
 
