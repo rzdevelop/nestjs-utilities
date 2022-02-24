@@ -1,5 +1,13 @@
 import { PinoLogger } from 'nestjs-pino';
-import { DeleteResult, FindConditions, FindManyOptions, FindOneOptions, Repository, UpdateResult } from 'typeorm';
+import {
+  DeepPartial,
+  DeleteResult,
+  FindConditions,
+  FindManyOptions,
+  FindOneOptions,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 
 import { PaginatedResponse } from '../pagination/paginated-response';
 
@@ -12,7 +20,7 @@ export class BaseService<TEntity, TRepository extends Repository<TEntity>> {
     this.logger.setContext(loggerContext);
   }
 
-  create(entity: TEntity): Promise<TEntity> {
+  create(entity: DeepPartial<TEntity>): Promise<TEntity> {
     return this.repository.save(entity);
   }
 
