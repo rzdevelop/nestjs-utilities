@@ -8,11 +8,12 @@ interface ConfigurationModuleOptions extends Omit<ModuleMetadata, 'controllers'>
 @Module({})
 export class ConfigurationModule {
   static register({ configModulesOptions, ...moduleMetadata }: ConfigurationModuleOptions): DynamicModule {
+    const configModule = ConfigModule.forRoot(configModulesOptions);
     return {
       module: ConfigurationModule,
-      imports: [ConfigModule.forRoot(configModulesOptions), ...(moduleMetadata.imports || [])],
+      imports: [configModule, ...(moduleMetadata.imports || [])],
       providers: [...(moduleMetadata.providers || [])],
-      exports: [...(moduleMetadata.exports || [])],
+      exports: [configModule, ...(moduleMetadata.exports || [])],
     };
   }
 }
