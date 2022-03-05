@@ -1,5 +1,7 @@
 import { INestApplication } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { applyDecorators } from '@nestjs/common';
+import { ApiParam } from '@nestjs/swagger';
 
 export interface SwaggerOptions {
   version?: string;
@@ -36,3 +38,36 @@ export const useSwagger = (app: INestApplication, options: SwaggerOptions = defa
 
   SwaggerModule.setup(options.endpoint ?? endpoint, app, document);
 };
+
+type DecoratorReturnType = ReturnType<typeof applyDecorators>;
+
+export const SwaggerController = (tag: string): DecoratorReturnType => applyDecorators(ApiBearerAuth(), ApiTags(tag));
+
+export interface SwaggerParamOptions {
+  controllerName: string;
+  idType: string;
+}
+
+export const SwaggerDecorator = (enable: boolean, tag = ''): DecoratorReturnType =>
+  applyDecorators(...(enable ? [SwaggerController(tag)] : []));
+
+export const SwaggerParam = (
+  paramIdName?: string,
+  body?: MethodDecorator,
+  swagger?: SwaggerParamOptions,
+): DecoratorReturnType =>
+  applyDecorators(
+    ...(!!swagger
+      ? [
+          ...(paramIdName
+            ? [
+                ApiParam({
+                  name: paramIdName,
+                  schema: { type: swagger.idType },
+                }),
+              ]
+            : []),
+          ...(body ? [body] : []),
+        ]
+      : []),
+  );
