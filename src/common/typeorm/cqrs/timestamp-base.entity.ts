@@ -2,7 +2,7 @@ import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 import { AggregateRoot } from '@nestjs/cqrs';
 
-export abstract class TimestampAggregateRootBaseEntity extends AggregateRoot {
+export abstract class TimestampBaseEntity extends AggregateRoot {
   constructor() {
     super();
   }

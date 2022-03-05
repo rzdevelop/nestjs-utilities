@@ -1,9 +1,8 @@
+import { AggregateRoot } from '@nestjs/cqrs';
 import { PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
-import { TimestampAggregateRootBaseEntity } from './timestamp-aggregate-root-base.entity';
-
-export abstract class BaseUuidEntity extends TimestampAggregateRootBaseEntity {
+export abstract class UuidBaseEntity extends AggregateRoot {
   constructor() {
     super();
     this.id = uuid();
