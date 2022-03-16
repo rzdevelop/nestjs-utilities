@@ -12,7 +12,11 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
     this.logger.setContext(RolesGuard.name);
   }
 
-  abstract validateRole(role: RoleType, extra?: { params: ParamsDictionary }): boolean;
+  abstract validateRole(role: RoleType, extra?: { params: ParamsDictionary; user: AuthUser }): boolean;
+
+  validateRoles(requiredRoles: RoleType[], extra?: { params: ParamsDictionary; user: AuthUser }): boolean {
+    return requiredRoles.some((role) => this.validateRole(role, extra));
+  }
 
   protected getRequiresRoles(context: ExecutionContext): RoleType[] {
     return this.reflector.getAllAndOverride<RoleType[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
@@ -28,6 +32,6 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
     const { user, params } = context.switchToHttp().getRequest<Request & { user: AuthUser }>();
     this.logger.debug({ user, requiredRoles });
 
-    return requiredRoles.some((role) => this.validateRole(role, { params }));
+    return requiredRoles.some((role) => this.validateRole(role, { params, user }));
   }
 }
