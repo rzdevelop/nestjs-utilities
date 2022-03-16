@@ -12,9 +12,12 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
     this.logger.setContext(RolesGuard.name);
   }
 
-  abstract validateRole(role: RoleType, extra?: { params: ParamsDictionary; user: AuthUser }): boolean;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  validateRole(role: RoleType, extra?: { params: ParamsDictionary; user: AuthUser }): boolean {
+    throw new Error('Method not implemented.');
+  }
 
-  validateRoles(requiredRoles: RoleType[], extra?: { params: ParamsDictionary; user: AuthUser }): boolean {
+  validateRoles(requiredRoles: RoleType[], extra: { params: ParamsDictionary; user: AuthUser }): boolean {
     return requiredRoles.some((role) => this.validateRole(role, extra));
   }
 
@@ -32,6 +35,6 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
     const { user, params } = context.switchToHttp().getRequest<Request & { user: AuthUser }>();
     this.logger.debug({ user, requiredRoles });
 
-    return requiredRoles.some((role) => this.validateRole(role, { params, user }));
+    return this.validateRoles(requiredRoles, { user, params });
   }
 }
