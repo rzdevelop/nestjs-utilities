@@ -11,7 +11,7 @@ import {
 
 import { PaginatedResponse } from '../pagination/paginated-response';
 
-export class BaseService<TEntity, TRepository extends Repository<TEntity>> {
+export class BaseService<TEntity, TRepository extends Repository<TEntity>, TId extends string | number = string> {
   constructor(
     protected readonly logger: PinoLogger,
     protected readonly repository: TRepository,
@@ -53,26 +53,26 @@ export class BaseService<TEntity, TRepository extends Repository<TEntity>> {
     };
   }
 
-  findOne(paramOne: string | FindConditions<TEntity>, options?: FindOneOptions<TEntity>): Promise<TEntity | undefined> {
-    if (typeof paramOne === 'string') {
+  findOne(paramOne: TId | FindConditions<TEntity>, options?: FindOneOptions<TEntity>): Promise<TEntity | undefined> {
+    if (typeof paramOne === 'string' || typeof paramOne === 'number') {
       return this.repository.findOne(paramOne, options);
     }
-    return this.repository.findOne(paramOne, options);
+    return this.repository.findOne(paramOne as FindConditions<TEntity>, options);
   }
 
   findOneOrFail(options?: FindOneOptions<TEntity>): Promise<TEntity> {
     return this.repository.findOneOrFail(options);
   }
 
-  findById(id: string, options?: FindOneOptions<TEntity>): Promise<TEntity> {
+  findById(id: TId, options?: FindOneOptions<TEntity>): Promise<TEntity> {
     return this.repository.findOneOrFail(id, options);
   }
 
-  update(id: string, entity: TEntity): Promise<UpdateResult> {
+  update(id: TId, entity: TEntity): Promise<UpdateResult> {
     return this.repository.update(id, entity);
   }
 
-  remove(id: string): Promise<DeleteResult> {
+  remove(id: TId): Promise<DeleteResult> {
     return this.repository.delete(id);
   }
 }
