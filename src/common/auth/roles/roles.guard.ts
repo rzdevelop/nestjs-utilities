@@ -1,5 +1,4 @@
 import { Request } from 'express';
-import { ParamsDictionary } from 'express-serve-static-core';
 import { PinoLogger } from 'nestjs-pino';
 
 import { CanActivate, ExecutionContext } from '@nestjs/common';
@@ -13,15 +12,12 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  validateRole(role: RoleType, extra?: { params: ParamsDictionary; user: AuthUser }): Promise<boolean> | boolean {
+  validateRole(role: RoleType, request?: Request & { user: AuthUser }): Promise<boolean> | boolean {
     throw new Error('Method not implemented.');
   }
 
-  validateRoles(
-    requiredRoles: RoleType[],
-    extra: { params: ParamsDictionary; user: AuthUser },
-  ): Promise<boolean> | boolean {
-    return requiredRoles.some((role) => this.validateRole(role, extra));
+  validateRoles(requiredRoles: RoleType[], request: Request & { user: AuthUser }): Promise<boolean> | boolean {
+    return requiredRoles.some((role) => this.validateRole(role, request));
   }
 
   protected getRequiresRoles(context: ExecutionContext): RoleType[] {
@@ -35,9 +31,9 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
       return true;
     }
 
-    const { user, params } = context.switchToHttp().getRequest<Request & { user: AuthUser }>();
-    this.logger.debug({ user, requiredRoles });
+    const req = context.switchToHttp().getRequest<Request & { user: AuthUser }>();
+    this.logger.debug({ user: req.user, requiredRoles });
 
-    return this.validateRoles(requiredRoles, { user, params });
+    return this.validateRoles(requiredRoles, req);
   }
 }
