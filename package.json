@@ -1,6 +1,6 @@
 {
   "name": "nestjs-utilities",
-  "version": "0.1.34",
+  "version": "1.0.0",
   "description": "NestJS Package including abstractions for typeorm, authentication, pagination, configuration and more",
   "author": "Renan Zelaya <renan_zelaya@hotmail.com>",
   "main": "lib/index.js",
