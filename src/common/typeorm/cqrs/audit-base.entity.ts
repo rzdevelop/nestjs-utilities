@@ -1,7 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { IAuditBaseEntity } from '../../types';
 
-export abstract class AuditBaseEntity extends AggregateRoot {
+export abstract class AuditBaseEntity extends AggregateRoot implements IAuditBaseEntity {
   constructor() {
     super();
   }
