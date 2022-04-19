@@ -1,4 +1,4 @@
-export { BaseService } from './base.service';
+export { BaseService, IBaseService } from './base.service';
 
 export { AuditBaseEntity } from './audit-base.entity';
 export { DetailedIntBaseEntity } from './detailed-int-base.entity';

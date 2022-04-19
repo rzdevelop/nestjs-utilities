@@ -72,11 +72,13 @@ export abstract class BaseService<
     };
   }
 
-  getAll(): Promise<TEntity[]> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getAll(options?: TGetAll): Promise<TEntity[]> {
     throw new NotImplementedException();
   }
 
-  getById(): Promise<TEntity> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getById(options?: TGetById): Promise<TEntity> {
     throw new NotImplementedException();
   }
 }
