@@ -1,9 +1,9 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
-import { IUuidBaseEntity } from '../../types';
+import { IIdBaseModel } from '../../types';
 
-export abstract class UuidBaseEntity extends AggregateRoot implements IUuidBaseEntity {
+export abstract class UuidBaseEntity extends AggregateRoot implements IIdBaseModel<string> {
   constructor() {
     super();
     this.id = uuid();

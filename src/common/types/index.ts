@@ -7,4 +7,4 @@ export type ClassType<T> = { new (...params: any[]): T };
 
 export type DecoratorReturnType = ReturnType<typeof applyDecorators>;
 
-export * from './base.entities';
+export * from './base.model';

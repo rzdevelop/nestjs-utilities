@@ -1,7 +1,7 @@
 import { Column } from 'typeorm';
-import { IModifiersBaseEntity } from '../types';
+import { IModifiersBaseModel } from '../types';
 
-export abstract class ModifiersBaseEntity implements IModifiersBaseEntity {
+export abstract class ModifiersBaseEntity implements IModifiersBaseModel {
   @Column({ type: 'varchar', length: '255', default: 'DEFAULT_CREATED_BY' })
   createdBy: string;
 

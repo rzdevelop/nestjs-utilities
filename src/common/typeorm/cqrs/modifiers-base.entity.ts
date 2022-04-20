@@ -1,8 +1,8 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import { Column } from 'typeorm';
-import { IModifiersBaseEntity } from '../../types';
+import { IModifiersBaseModel } from '../../types';
 
-export abstract class ModifiersBaseEntity extends AggregateRoot implements IModifiersBaseEntity {
+export abstract class ModifiersBaseEntity extends AggregateRoot implements IModifiersBaseModel {
   constructor() {
     super();
   }

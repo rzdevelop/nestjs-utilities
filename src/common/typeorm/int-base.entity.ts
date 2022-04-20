@@ -1,7 +1,7 @@
 import { PrimaryGeneratedColumn } from 'typeorm';
-import { IIntBaseEntity } from '../types';
+import { IIdBaseModel } from '../types';
 
-export abstract class IntBaseEntity implements IIntBaseEntity {
+export abstract class IntBaseEntity implements IIdBaseModel<number> {
   @PrimaryGeneratedColumn()
   id: number;
 }
