@@ -1,11 +1,12 @@
 import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { IAuditBaseModel } from '../types';
 
-export abstract class AuditBaseEntity implements IAuditBaseModel {
+import { AuditBaseModelInterface } from '../contracts';
+
+export abstract class AuditBaseEntity implements AuditBaseModelInterface {
   @Column({ type: 'varchar', length: '255', default: 'DEFAULT_CREATED_BY' })
   createdBy: string;
 
-  @Column({ type: 'varchar', length: '255', default: 'DEFAULT_CREATED_BY' })
+  @Column({ type: 'varchar', length: '255', default: 'DEFAULT_UPDATED_BY' })
   updatedBy: string;
 
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

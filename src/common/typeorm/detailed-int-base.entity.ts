@@ -1,8 +1,8 @@
 import { PrimaryGeneratedColumn } from 'typeorm';
-import { IDetailedBaseModel } from '../types';
+import { IdBaseModelInterface } from '../contracts';
 import { AuditBaseEntity } from './audit-base.entity';
 
-export abstract class DetailedIntBaseEntity extends AuditBaseEntity implements IDetailedBaseModel<number> {
+export abstract class DetailedIntBaseEntity extends AuditBaseEntity implements IdBaseModelInterface<number> {
   constructor() {
     super();
   }

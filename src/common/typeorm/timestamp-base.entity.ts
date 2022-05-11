@@ -1,7 +1,8 @@
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { ITimestampBaseModel } from '../types';
 
-export abstract class TimestampBaseEntity implements ITimestampBaseModel {
+import { TimestampBaseModelInterface } from '../contracts';
+
+export abstract class TimestampBaseEntity implements TimestampBaseModelInterface {
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 

@@ -6,5 +6,3 @@ export type UnknownObject<Type = unknown, Key extends string | number | symbol =
 export type ClassType<T> = { new (...params: any[]): T };
 
 export type DecoratorReturnType = ReturnType<typeof applyDecorators>;
-
-export * from './base.model';

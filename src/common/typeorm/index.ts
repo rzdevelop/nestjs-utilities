@@ -7,3 +7,5 @@ export { IntBaseEntity } from './int-base.entity';
 export { UuidBaseEntity } from './uuid-base.entity';
 export { ModifiersBaseEntity } from './modifiers-base.entity';
 export { TimestampBaseEntity } from './timestamp-base.entity';
+
+export * from './repository';

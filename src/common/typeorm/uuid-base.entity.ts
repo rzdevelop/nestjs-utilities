@@ -1,10 +1,11 @@
 import { PrimaryColumn } from 'typeorm';
-import { v4 as uuid } from 'uuid';
-import { IIdBaseModel } from '../types';
+import { v4 as uuidv4 } from 'uuid';
 
-export abstract class UuidBaseEntity implements IIdBaseModel<string> {
-  constructor() {
-    this.id = uuid();
+import { IdBaseModelInterface } from '../contracts';
+
+export abstract class UuidBaseEntity implements IdBaseModelInterface<string> {
+  constructor(id?: string) {
+    this.id = id ?? uuidv4();
   }
 
   @PrimaryColumn({ type: 'text' })
