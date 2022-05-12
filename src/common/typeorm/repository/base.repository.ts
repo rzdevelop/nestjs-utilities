@@ -56,7 +56,7 @@ export abstract class BaseRepository<TId extends string | number, TModelInterfac
   abstract getBy<TKey extends keyof TModelInterface>(
     property: TKey,
     value: TModelInterface[TKey],
-  ): Promise<TModelInterface>;
+  ): Promise<TModelInterface | null>;
 
   abstract getAll(options?: GetOptions<TModelInterface>): Promise<TModelInterface[]>;
 
