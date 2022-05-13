@@ -18,7 +18,7 @@ export interface BaseRepositoryInterface<TId extends string | number, TModelInte
   getByOrFail<TKey extends keyof TModelInterface>(
     property: TKey,
     value: TModelInterface[TKey],
-  ): Promise<TModelInterface | null>;
+  ): Promise<TModelInterface>;
   getBy<TKey extends keyof TModelInterface>(
     property: TKey,
     value: TModelInterface[TKey],
