@@ -12,16 +12,23 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  validateRole(role: RoleType, request?: Request & { user: AuthUser }): Promise<boolean> | boolean {
+  protected validateRole(role: RoleType, request?: Request & { user: AuthUser }): Promise<boolean> | boolean {
     throw new Error('Method not implemented.');
   }
 
-  validateRoles(requiredRoles: RoleType[], request: Request & { user: AuthUser }): Promise<boolean> | boolean {
+  protected validateRoles(
+    requiredRoles: RoleType[],
+    request: Request & { user: AuthUser },
+  ): Promise<boolean> | boolean {
     return requiredRoles.some((role) => this.validateRole(role, request));
   }
 
   protected getRequiresRoles(context: ExecutionContext): RoleType[] {
     return this.reflector.getAllAndOverride<RoleType[]>(ROLES_KEY, [context.getHandler(), context.getClass()]);
+  }
+
+  protected getRequest<T = Request>(context: ExecutionContext): T {
+    return context.switchToHttp().getRequest<T>();
   }
 
   canActivate(context: ExecutionContext): Promise<boolean> | boolean {
@@ -31,7 +38,8 @@ export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
       return true;
     }
 
-    const req = context.switchToHttp().getRequest<Request & { user: AuthUser }>();
+    const req = this.getRequest<Request & { user: AuthUser }>(context);
+
     this.logger.debug({ user: req.user, requiredRoles });
 
     return this.validateRoles(requiredRoles, req);
