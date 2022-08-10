@@ -7,7 +7,7 @@ import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from './roles.decorator';
 
 export abstract class RolesGuard<RoleType, AuthUser> implements CanActivate {
-  constructor(private reflector: Reflector, private readonly logger: PinoLogger) {
+  constructor(protected reflector: Reflector, protected readonly logger: PinoLogger) {
     this.logger.setContext(RolesGuard.name);
   }
 
