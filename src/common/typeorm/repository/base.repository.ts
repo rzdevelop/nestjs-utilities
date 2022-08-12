@@ -1,36 +1,29 @@
 import { PinoLogger } from 'nestjs-pino';
-import { FindOneOptions, FindOptionsOrder, FindOptionsWhere, Repository } from 'typeorm';
+import { FindManyOptions, FindOneOptions, Repository } from 'typeorm';
 
-export interface GetOptions<TModel> {
-  where?: FindOptionsWhere<TModel>;
-  relations?: string[];
-  order?: FindOptionsOrder<TModel>;
-}
-
-export interface BaseRepositoryInterface<TId extends string | number, TModelInterface, TEntity = TModelInterface> {
+export interface BaseRepositoryInterface<
+  TId extends string | number,
+  TModelInterface extends { id: TId },
+  TEntity extends TModelInterface = TModelInterface,
+> {
   create(model: TModelInterface): Promise<TModelInterface>;
   update(id: TId, model: TModelInterface): Promise<void>;
   remove(id: TId): Promise<void>;
 
-  getByIdOrFail(id: TId): Promise<TModelInterface>;
-  getById(id: TId): Promise<TModelInterface | null>;
+  findOne(options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
+  findOneOrFail(options?: FindOneOptions<TEntity>): Promise<TModelInterface>;
 
-  getByOrFail<TKey extends keyof TModelInterface>(
-    property: TKey,
-    value: TModelInterface[TKey],
-  ): Promise<TModelInterface>;
-  getBy<TKey extends keyof TModelInterface>(
-    property: TKey,
-    value: TModelInterface[TKey],
-  ): Promise<TModelInterface | null>;
+  getById(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
+  getByIdOrFail(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface>;
 
-  findOne(options: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
-
-  getAll(options?: GetOptions<TModelInterface>): Promise<TModelInterface[]>;
+  getAll(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]>;
 }
 
-export abstract class BaseRepository<TId extends string | number, TModelInterface, TEntity extends TModelInterface>
-  implements BaseRepositoryInterface<TId, TModelInterface, TEntity>
+export abstract class BaseRepository<
+  TId extends string | number,
+  TModelInterface extends { id: TId },
+  TEntity extends TModelInterface = TModelInterface,
+> implements BaseRepositoryInterface<TId, TModelInterface, TEntity>
 {
   constructor(
     loggerContext: string,
@@ -40,25 +33,38 @@ export abstract class BaseRepository<TId extends string | number, TModelInterfac
     this.logger.setContext(loggerContext);
   }
 
+  getAll(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]> {
+    return this.repository.find(options);
+  }
+
+  getById(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface | null> {
+    return this.findOne({
+      ...options,
+      // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
+      where: {
+        ...options.where,
+        id,
+      },
+    });
+  }
+  getByIdOrFail(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface> {
+    return this.findOneOrFail({
+      ...options,
+      // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
+      where: {
+        ...options.where,
+        id,
+      },
+    });
+  }
+
   findOne(options: FindOneOptions<TEntity>): Promise<TModelInterface | null> {
     return this.repository.findOne(options);
   }
 
-  abstract getByIdOrFail(id: TId): Promise<TModelInterface>;
-
-  abstract getById(id: TId): Promise<TModelInterface | null>;
-
-  abstract getByOrFail<TKey extends keyof TModelInterface>(
-    property: TKey,
-    value: TModelInterface[TKey],
-  ): Promise<TModelInterface>;
-
-  abstract getBy<TKey extends keyof TModelInterface>(
-    property: TKey,
-    value: TModelInterface[TKey],
-  ): Promise<TModelInterface | null>;
-
-  abstract getAll(options?: GetOptions<TModelInterface>): Promise<TModelInterface[]>;
+  findOneOrFail(options: FindOneOptions<TEntity>): Promise<TModelInterface> {
+    return this.repository.findOneOrFail(options);
+  }
 
   protected abstract _fromModel(model: TModelInterface): TEntity;
 
@@ -71,6 +77,7 @@ export abstract class BaseRepository<TId extends string | number, TModelInterfac
   async update(id: TId, model: TModelInterface): Promise<void> {
     const entity = this._fromModel(model);
 
+    // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
     await this.repository.update(id, entity);
   }
 
