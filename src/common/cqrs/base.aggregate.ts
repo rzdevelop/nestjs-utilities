@@ -1,41 +1,93 @@
-import { AggregateRoot } from '@nestjs/cqrs';
-import { DetailedBaseModelInterface } from '../contracts';
+import { PinoLogger } from 'nestjs-pino';
+import { FindManyOptions, FindOneOptions, FindOptionsOrder, FindOptionsWhere, Repository } from 'typeorm';
 
-export abstract class BaseModel<TId extends string | number>
-  extends AggregateRoot
-  implements DetailedBaseModelInterface<TId>
+export interface GetOptions<TModel> {
+  where?: FindOptionsWhere<TModel>;
+  relations?: string[];
+  order?: FindOptionsOrder<TModel>;
+}
+
+export interface BaseRepositoryInterface<
+  TId extends string | number,
+  TModelInterface extends { id: TId },
+  TEntity extends TModelInterface = TModelInterface,
+> {
+  create(model: TModelInterface): Promise<TModelInterface>;
+  update(id: TId, model: TModelInterface): Promise<void>;
+  remove(id: TId): Promise<void>;
+
+  findOne(options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
+  findOneOrFail(options?: FindOneOptions<TEntity>): Promise<TModelInterface>;
+
+  getById(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
+  getByIdOrFail(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface>;
+
+  getAll(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]>;
+}
+
+export abstract class BaseRepository<
+  TId extends string | number,
+  TModelInterface extends { id: TId },
+  TEntity extends TModelInterface = TModelInterface,
+> implements BaseRepositoryInterface<TId, TModelInterface, TEntity>
 {
-  constructor(id: TId, executedBy: string) {
-    super();
-
-    const now = new Date();
-
-    this.id = id;
-    this.createdBy = executedBy;
-    this.updatedBy = executedBy;
-    this.createdAt = now;
-    this.updatedAt = now;
+  constructor(
+    loggerContext: string,
+    protected readonly logger: PinoLogger,
+    protected readonly repository: Repository<TEntity>,
+  ) {
+    this.logger.setContext(loggerContext);
   }
 
-  readonly createdBy: string;
-  updatedBy: string;
-  readonly createdAt: Date;
-  updatedAt: Date;
-  readonly id: TId;
-
-  public applyUpdate(executedBy: string): void {
-    this.updatedAt = new Date();
-    this.updatedBy = executedBy;
+  getAll(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]> {
+    return this.repository.find(options);
   }
 
-  protected _init(createdBy: string, updatedBy: string, createdAt: Date, updatedAt: Date): void {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    this.createdBy = createdBy;
-    this.updatedBy = updatedBy;
+  getById(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface | null> {
+    return this.findOne({
+      ...options,
+      // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
+      where: {
+        ...options.where,
+        id,
+      },
+    });
+  }
+  getByIdOrFail(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface> {
+    return this.findOneOrFail({
+      ...options,
+      // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
+      where: {
+        ...options.where,
+        id,
+      },
+    });
+  }
+
+  findOne(options: FindOneOptions<TEntity>): Promise<TModelInterface | null> {
+    return this.repository.findOne(options);
+  }
+
+  findOneOrFail(options: FindOneOptions<TEntity>): Promise<TModelInterface> {
+    return this.repository.findOneOrFail(options);
+  }
+
+  protected abstract _fromModel(model: TModelInterface): TEntity;
+
+  create(model: TModelInterface): Promise<TModelInterface> {
+    const entity = this._fromModel(model);
+
+    return this.repository.save(entity);
+  }
+
+  async update(id: TId, model: TModelInterface): Promise<void> {
+    const entity = this._fromModel(model);
+
+    // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
+    await this.repository.update(id, entity);
+  }
+
+  async remove(id: TId): Promise<void> {
+    await this.repository.delete(id);
   }
 }
