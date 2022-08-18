@@ -6,8 +6,7 @@ export interface BaseRepositoryInterface<
   TModelInterface extends { id: TId },
   TEntity extends TModelInterface = TModelInterface,
 > {
-  create(model: TModelInterface): Promise<TModelInterface>;
-  update(id: TId, model: TModelInterface): Promise<void>;
+  save(model: TModelInterface): Promise<TModelInterface>;
   remove(id: TId): Promise<void>;
 
   findOne(options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
@@ -68,17 +67,10 @@ export abstract class BaseRepository<
 
   protected abstract _fromModel(model: TModelInterface): TEntity;
 
-  create(model: TModelInterface): Promise<TModelInterface> {
+  save(model: TModelInterface): Promise<TModelInterface> {
     const entity = this._fromModel(model);
 
     return this.repository.save(entity);
-  }
-
-  async update(id: TId, model: TModelInterface): Promise<void> {
-    const entity = this._fromModel(model);
-
-    // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
-    await this.repository.update(id, entity);
   }
 
   async remove(id: TId): Promise<void> {
