@@ -1,4 +1,5 @@
 import { AggregateRoot } from '@nestjs/cqrs';
+
 import { DetailedBaseModelInterface } from '../contracts';
 
 export abstract class BaseModel<TId extends string | number>

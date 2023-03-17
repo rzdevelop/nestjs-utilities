@@ -1,6 +1,7 @@
 import { Transform } from 'class-transformer';
 import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 import { isNil } from 'ramda';
+
 import { UnknownObject } from '../types';
 
 export function TransformToBoolean(): PropertyDecorator {

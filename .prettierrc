@@ -1,5 +1,9 @@
 {
   "printWidth": 120,
   "trailingComma": "all",
-  "singleQuote": true
+  "singleQuote": true,
+  "sortingMethod": "alphabetical",
+  "stripNewlines": true,
+  "importTypeOrder": ["NPMPackages", "localImports"],
+  "newlineBetweenTypes": true
 }

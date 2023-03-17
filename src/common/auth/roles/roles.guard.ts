@@ -1,8 +1,7 @@
-import { Request } from 'express';
-import { PinoLogger } from 'nestjs-pino';
-
 import { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { Request } from 'express';
+import { PinoLogger } from 'nestjs-pino';
 
 import { ROLES_KEY } from './roles.decorator';
 

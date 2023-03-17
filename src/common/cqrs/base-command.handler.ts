@@ -1,6 +1,5 @@
-import { PinoLogger } from 'nestjs-pino';
-
 import { ICommand, ICommandHandler } from '@nestjs/cqrs';
+import { PinoLogger } from 'nestjs-pino';
 
 export interface IBaseCommandHandler<TCommand extends ICommand, TResult> extends ICommandHandler<TCommand, TResult> {
   handle(command: TCommand): Promise<TResult>;

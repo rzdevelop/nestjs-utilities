@@ -1,5 +1,6 @@
 import { ICommand } from '@nestjs/cqrs';
 import { v4 as uuidv4 } from 'uuid';
+
 import { BaseCqrsMetadata } from './base.metadata';
 
 export interface BaseCommandInterface extends ICommand, BaseCqrsMetadata {

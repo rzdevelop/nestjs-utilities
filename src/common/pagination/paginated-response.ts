@@ -1,6 +1,5 @@
-import { IsNumberString, IsOptional } from 'class-validator';
-
 import { ApiProperty } from '@nestjs/swagger';
+import { IsNumberString, IsOptional } from 'class-validator';
 
 export interface PaginatedResponse<T> {
   data: T[];

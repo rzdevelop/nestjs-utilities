@@ -1,6 +1,5 @@
-import { PinoLogger } from 'nestjs-pino';
-
 import { IQuery, IQueryHandler } from '@nestjs/cqrs';
+import { PinoLogger } from 'nestjs-pino';
 
 export interface IBaseQueryHandler<TQuery extends IQuery, TResult> extends IQueryHandler<TQuery, TResult> {
   handle(query: TQuery): Promise<TResult>;

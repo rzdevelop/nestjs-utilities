@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { applyDecorators } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags, DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ApiParam } from '@nestjs/swagger';
 
 export interface SwaggerOptions {

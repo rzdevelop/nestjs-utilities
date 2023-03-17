@@ -1,6 +1,3 @@
-import { Response } from 'express';
-import { EntityNotFoundError } from 'typeorm';
-
 import {
   ArgumentsHost,
   Catch,
@@ -9,6 +6,8 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { Response } from 'express';
+import { EntityNotFoundError } from 'typeorm';
 
 @Catch(EntityNotFoundError)
 export class EntityNotFoundFilter implements ExceptionFilter {

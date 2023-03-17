@@ -1,5 +1,5 @@
-import { PinoLogger } from 'nestjs-pino';
 import { IEvent, IEventHandler } from '@nestjs/cqrs';
+import { PinoLogger } from 'nestjs-pino';
 
 export interface IBaseEventHandler<TEvent extends IEvent> extends IEventHandler<TEvent> {
   handleEvent(event: TEvent): Promise<void>;

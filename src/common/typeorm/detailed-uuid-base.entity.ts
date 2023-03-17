@@ -1,5 +1,6 @@
 import { PrimaryColumn } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+
 import { DetailedBaseModelInterface } from '../contracts';
 import { AuditBaseEntity } from './audit-base.entity';
 

@@ -1,8 +1,7 @@
-import { Request } from 'express';
-import { map } from 'rxjs/operators';
-
 import { CallHandler, ExecutionContext, HttpStatus, Injectable, NestInterceptor } from '@nestjs/common';
+import { Request } from 'express';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class CreatedInterceptor<T = unknown, R = unknown> implements NestInterceptor<T, R> {

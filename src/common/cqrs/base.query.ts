@@ -1,5 +1,6 @@
 import { IQuery } from '@nestjs/cqrs';
 import { v4 as uuidv4 } from 'uuid';
+
 import { BaseCqrsMetadata } from './base.metadata';
 
 export interface BaseQueryInterface extends IQuery, BaseCqrsMetadata {
