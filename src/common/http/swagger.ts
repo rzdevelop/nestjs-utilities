@@ -1,6 +1,16 @@
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import { applyDecorators } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiInternalServerErrorResponse,
+  ApiResponse,
+  ApiResponseMetadata,
+  ApiTags,
+  ApiUnauthorizedResponse,
+  DocumentBuilder,
+  SwaggerModule,
+} from '@nestjs/swagger';
 import { ApiParam } from '@nestjs/swagger';
 
 export interface SwaggerOptions {
@@ -70,4 +80,31 @@ export const SwaggerParam = (
           ...(body ? [body] : []),
         ]
       : []),
+  );
+
+export enum ResponseDescription {
+  OK = 'The request was successful',
+  CREATED = 'The resource was created',
+  BAD_REQUEST = 'The request is not valid',
+  NOT_FOUND = 'No entity was found matching the given id',
+  UNAUTHORIZED = 'Authentication failed',
+  INTERNAL_SERVER_ERROR = 'An unexpected error occurred inside the server',
+}
+
+export const SwaggerResponsesDecorator = (
+  responseStatusCode: HttpStatus,
+  responseDescription: ResponseDescription,
+  responseType?: ApiResponseMetadata['type'],
+): DecoratorReturnType =>
+  applyDecorators(
+    ApiResponse({
+      status: responseStatusCode,
+      description: responseDescription,
+      type: responseType,
+    }),
+    ApiBadRequestResponse({ description: ResponseDescription.BAD_REQUEST }),
+    ApiInternalServerErrorResponse({
+      description: ResponseDescription.INTERNAL_SERVER_ERROR,
+    }),
+    ApiUnauthorizedResponse({ description: ResponseDescription.UNAUTHORIZED }),
   );
