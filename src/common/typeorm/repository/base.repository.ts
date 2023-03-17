@@ -12,10 +12,11 @@ export interface BaseRepositoryInterface<
   findOne(options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
   findOneOrFail(options?: FindOneOptions<TEntity>): Promise<TModelInterface>;
 
-  getById(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
-  getByIdOrFail(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface>;
+  findById(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface | null>;
+  findByIdOrFail(id: TId, options?: FindOneOptions<TEntity>): Promise<TModelInterface>;
 
-  getAll(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]>;
+  find(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]>;
+  findAndCount(options?: FindManyOptions<TEntity>): Promise<[TModelInterface[], number]>;
 }
 
 export abstract class BaseRepository<
@@ -32,11 +33,15 @@ export abstract class BaseRepository<
     this.logger.setContext(loggerContext);
   }
 
-  getAll(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]> {
+  find(options?: FindManyOptions<TEntity>): Promise<TModelInterface[]> {
     return this.repository.find(options);
   }
 
-  getById(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface | null> {
+  findAndCount(options?: FindManyOptions<TEntity>): Promise<[TModelInterface[], number]> {
+    return this.repository.findAndCount(options);
+  }
+
+  findById(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface | null> {
     return this.findOne({
       ...options,
       // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
@@ -46,7 +51,8 @@ export abstract class BaseRepository<
       },
     });
   }
-  getByIdOrFail(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface> {
+
+  findByIdOrFail(id: TId, options: FindOneOptions<TEntity> = { where: {} }): Promise<TModelInterface> {
     return this.findOneOrFail({
       ...options,
       // @ts-expect-error This is an expected TS error since is not able to get the id type since TId can only be string or number
