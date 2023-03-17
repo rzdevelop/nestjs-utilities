@@ -1,6 +1,6 @@
 import { NotImplementedException } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
-import { DeepPartial, DeleteResult, FindManyOptions, Repository, UpdateResult } from 'typeorm';
+import { DeepPartial, DeleteResult, FindManyOptions, ObjectLiteral, Repository, UpdateResult } from 'typeorm';
 
 import { PaginatedResponse } from '../pagination/paginated-response';
 import { UnknownObject } from '../types';
@@ -24,7 +24,7 @@ export interface IBaseService<
 }
 
 export abstract class BaseService<
-  TEntity,
+  TEntity extends ObjectLiteral,
   TRepository extends Repository<TEntity>,
   TId extends string | number = string,
   TGetAll = UnknownObject,
