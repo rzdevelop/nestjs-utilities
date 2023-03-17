@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 import { BaseCqrsMetadata } from './base.metadata';
 
@@ -16,7 +16,7 @@ export abstract class BaseEvent implements BaseEventInterface {
   executedBy: string;
 
   constructor(metadata: BaseEventMetadata) {
-    this.id = uuidv4();
+    this.id = randomUUID();
     this.correlationId = metadata.correlationId;
     this.causationId = metadata.causationId;
     this.executedBy = metadata.executedBy;

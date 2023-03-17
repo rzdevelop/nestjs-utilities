@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
-export const genReqId = (): string => uuidv4();
+export const genReqId = (): string => randomUUID();
 
 export const timestampFn = (): string => {
   const now = Date.now();
